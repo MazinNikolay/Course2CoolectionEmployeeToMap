@@ -6,8 +6,8 @@ import java.util.Map;
 public class EmployeeBook {
     private final Map<String, Employee> employeesMap;
 
-    public EmployeeBook(HashMap<String, Employee> employeesMap) {
-        this.employeesMap = employeesMap;
+    public EmployeeBook() {
+        this.employeesMap = new HashMap<>();
     }
 
     public Map<String, Employee> getEmployeesMap() {

@@ -15,8 +15,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeBook employeeBook;
 
-    public EmployeeServiceImpl(HashMap<String, Employee> employees) {
-        this.employeeBook = new EmployeeBook(employees);
+    public EmployeeServiceImpl() {
+        this.employeeBook = new EmployeeBook();
     }
 
     @Override
