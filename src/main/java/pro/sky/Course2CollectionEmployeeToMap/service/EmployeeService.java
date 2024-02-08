@@ -2,15 +2,15 @@ package pro.sky.Course2CollectionEmployeeToMap.service;
 
 import pro.sky.Course2CollectionEmployeeToMap.model.Employee;
 
-import java.util.List;
+import java.util.Map;
 
 public interface EmployeeService {
 
-    Employee addEmployee(String firstName, String lastName);
+    Employee addEmployee(String firstName, String surName, String lastName, int department, double salary);
 
-    Employee removeEmployee(String firstName, String lastName);
+    Employee removeEmployee(String firstName, String surName, String lastName);
 
-    Employee findEmployee(String firstName, String lastName);
+    Employee findEmployee(String firstName, String surName, String lastName);
 
-    List<Employee> printAllEmployees();
+    Map<String, Employee> printAllEmployees();
 }

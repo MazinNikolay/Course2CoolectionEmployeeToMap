@@ -7,6 +7,8 @@ import pro.sky.Course2CollectionEmployeeToMap.exception.EmployeeNotFoundExceptio
 import pro.sky.Course2CollectionEmployeeToMap.model.Employee;
 import pro.sky.Course2CollectionEmployeeToMap.service.EmployeeService;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -25,24 +27,35 @@ public class EmployeeController {
 
     @GetMapping(path = "/add")
     public Employee add(@RequestParam("firstName") String firstName,
-                        @RequestParam("lastName") String lastName) {
-        return employeeService.addEmployee(firstName, lastName);
+                        @RequestParam("surName") String surName,
+                        @RequestParam("lastName") String lastName,
+                        @RequestParam("department") int department,
+                        @RequestParam("salary") double salary) {
+        return employeeService.addEmployee(firstName, surName, lastName, department, salary);
     }
 
     @GetMapping(path = "/find")
     public Employee find(@RequestParam("firstName") String firstName,
+                         @RequestParam("surName") String surName,
                          @RequestParam("lastName") String lastName) {
-        return employeeService.findEmployee(firstName, lastName);
+        return employeeService.findEmployee(firstName, surName, lastName);
     }
 
     @GetMapping(path = "/remove")
     public Employee remove(@RequestParam("firstName") String firstName,
+                           @RequestParam("surName") String surName,
                            @RequestParam("lastName") String lastName) {
-        return employeeService.removeEmployee(firstName, lastName);
+        return employeeService.removeEmployee(firstName, surName, lastName);
     }
 
     @GetMapping
-    public List<Employee> print() {
-        return employeeService.printAllEmployees();
+    public List<String> print() {
+        List<String> employeeList = new ArrayList<>();
+        for (Employee employee : employeeService.printAllEmployees().values()) {
+            if (employee != null) {
+                employeeList.add(employee.toString());
+            }
+        }
+        return employeeList;
     }
 }

@@ -5,56 +5,55 @@ import pro.sky.Course2CollectionEmployeeToMap.exception.EmployeeAlreadyAddedExce
 import pro.sky.Course2CollectionEmployeeToMap.exception.EmployeeNotFoundException;
 import pro.sky.Course2CollectionEmployeeToMap.exception.EmployeeStorageIsFullException;
 import pro.sky.Course2CollectionEmployeeToMap.model.Employee;
+import pro.sky.Course2CollectionEmployeeToMap.model.EmployeeBook;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-    final private static int MAX_RANGE_EMPLOYEE = 4;
+    final private static int MAX_RANGE_EMPLOYEE = 10;
 
-    private final List<Employee> employees;
+    private final EmployeeBook employeeBook;
 
-    public EmployeeServiceImpl() {
-        this.employees = new ArrayList<>();
+    public EmployeeServiceImpl(HashMap<String, Employee> employees) {
+        this.employeeBook = new EmployeeBook(employees);
     }
 
     @Override
-    public Employee addEmployee(String firstName, String lastName) {
-        Employee employee = new Employee(firstName, lastName);
-        if (employees.size() >= MAX_RANGE_EMPLOYEE) {
+    public Employee addEmployee(String firstName, String surName, String lastName, int department, double salary) {
+        String key = firstName.concat(surName).concat(lastName);
+        if (employeeBook.getEmployeesMap().size() >= MAX_RANGE_EMPLOYEE) {
             throw new EmployeeStorageIsFullException("Превышен лимит количества сотрудников в фирме");
-        } else if (employees.contains(employee)) {
+        } else if (employeeBook.getEmployeesMap().containsKey(key)) {
             throw new EmployeeAlreadyAddedException("Сотрудник с такими данными уже добавлен");
         }
-        employees.add(employee);
+        Employee employee = new Employee(firstName, surName, lastName, department, salary);
+        employeeBook.getEmployeesMap().put(key, employee);
         return employee;
     }
 
     @Override
-    public Employee removeEmployee(String firstName, String lastName) {
-        Employee employee = new Employee(firstName, lastName);
-        if (!employees.contains(employee)) {
+    public Employee removeEmployee(String firstName, String surName, String lastName) {
+        String key = firstName.concat(surName).concat(lastName);
+        if (!employeeBook.getEmployeesMap().containsKey(key)) {
             throw new EmployeeNotFoundException("Сотрудник с заданными данными не найден");
         }
-        employees.remove(employee);
-        return employee;
+        employeeBook.getEmployeesMap().remove(key);
+        return employeeBook.getEmployeesMap().get(key);
     }
 
     @Override
-    public Employee findEmployee(String firstName, String lastName) {
-        Employee target = new Employee(firstName, lastName);
-        int targetIndex = employees.indexOf(target);
-//        if (!employees.contains(target)) {
-        if (targetIndex < 0) {
+    public Employee findEmployee(String firstName, String surName, String lastName) {
+        String key = firstName.concat(surName).concat(lastName);
+        boolean employeeFound = employeeBook.getEmployeesMap().containsKey(key);
+        if (!employeeFound) {
             throw new EmployeeNotFoundException("Сотрудник с заданными данными не найден");
         }
-        return employees.get(targetIndex);
+        return employeeBook.getEmployeesMap().get(key);
     }
 
     @Override
-    public List<Employee> printAllEmployees() {
-        return Collections.unmodifiableList(employees);
+    public Map<String, Employee> printAllEmployees() {
+        return Collections.unmodifiableMap(employeeBook.getEmployeesMap());
     }
 }
